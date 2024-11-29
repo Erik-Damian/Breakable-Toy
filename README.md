@@ -16,7 +16,6 @@ This repository hosts a simple To-Do application with a **React Native (TypeScri
 - [🔧 Tests](#-tests)
 - [📄 Documentation Links](#-documentation-links)
 - [🩹 Features To Be Implemented](#-features-to-be-implemented)
-- [💡 Contribution Guidelines](#-contribution-guidelines)
 
 ---
 
