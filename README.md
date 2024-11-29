@@ -2,6 +2,23 @@
 # To-Do Application
 
 This repository hosts a simple To-Do application with a **React Native (TypeScript)** front end and a **Spring Boot** back end. The application manages tasks with features like priority, due dates, and status tracking.
+---
+## 📜 Table of Contents
+
+- [📂 Project Structure](#-project-structure)
+- [📋 Task Model (Back-End)](#-task-model-back-end)
+- [🚀 Getting Started](#-getting-started)
+  - [Front-End](#front-end)
+  - [Back-End](#back-end)
+- [📡 API Endpoints](#-api-endpoints)
+  - [Task Management](#task-management)
+  - [Filtering and Statistics](#filtering-and-statistics)
+- [🔧 Tests](#-tests)
+- [📄 Documentation Links](#-documentation-links)
+- [🩹 Features To Be Implemented](#-features-to-be-implemented)
+- [💡 Contribution Guidelines](#-contribution-guidelines)
+- [📜 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
 
 ---
 
@@ -104,13 +121,13 @@ Each task is represented by the following attributes:
 ---
 
 ## 📄 Documentation Links
-- [Feedback Document](#https://encoradigital.sharepoint.com/:w:/s/spark2024f-mx2/EVMxhTGaS7VDh7cT2NYKnfcBJ4mGykxFw1WVIRguqpG6JQ?e=lyq5ZA)  
+- [Feedback Document](https://encoradigital.sharepoint.com/:w:/s/spark2024f-mx2/EVMxhTGaS7VDh7cT2NYKnfcBJ4mGykxFw1WVIRguqpG6JQ?e=lyq5ZA)  
 - [Tech Log](#) 
-- [Presentation](#https://www.canva.com/design/DAGXztibgns/Y0GJxCTR1crYDj4Wpo08OQ/edit?utm_content=DAGXztibgns&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) 
+- [Presentation](https://www.canva.com/design/DAGXztibgns/Y0GJxCTR1crYDj4Wpo08OQ/edit?utm_content=DAGXztibgns&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) 
 
 ---
 
-## 🔧 Features To Be Implemented
+## 🩹 Features To Be Implemented
 - [ ] Front and back end tests.
 - [ ] Finalize the front-end design.
 - [ ] Fix back-end bugs.
