@@ -99,14 +99,14 @@ Each task is represented by the following attributes:
 
 ## 🔧 Tests
 
-### [WIP]
+[WIP]
 
 ---
 
 ## 📄 Documentation Links
-- [Feedback Document](#) *(replace with the actual link)*  
-- [Tech Log](#) *(replace with the actual link)*  
-- [Presentation](#) *(replace with the actual link)*  
+- [Feedback Document](#https://encoradigital.sharepoint.com/:w:/s/spark2024f-mx2/EVMxhTGaS7VDh7cT2NYKnfcBJ4mGykxFw1WVIRguqpG6JQ?e=lyq5ZA)  
+- [Tech Log](#) 
+- [Presentation](#https://www.canva.com/design/DAGXztibgns/Y0GJxCTR1crYDj4Wpo08OQ/edit?utm_content=DAGXztibgns&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) 
 
 ---
 
