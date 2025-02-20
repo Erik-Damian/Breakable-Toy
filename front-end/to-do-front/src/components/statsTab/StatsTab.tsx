@@ -1,23 +1,22 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { Button, Form, Table, Container, Row, Col, Pagination } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default class StatsTab extends Component {
-  render() {
-    return (
-      <div className='stats-container'>
-        <h1>Stats</h1>
-        <div className='divided-container'>
-            <div className='first-half'>
-                <p>Average time to finish tasks</p>
-                <p>22.15 minutes</p>
-            </div>
-            <div className='second-half'>
-                <p>Average time to finish task by priority:</p>
-                <p>Low: 10:25 minutes</p>
-                <p>Medium: 10:25 minutes</p>
-                <p>High: 10:25 minutes</p>
-            </div>
-        </div>
-      </div>
-    )
-  }
+export default function StatsTable() {
+  return (
+    <Row>
+      <Col md={6}>
+        <p><strong>Average time to finish tasks:</strong> 22:15 minutes</p>
+      </Col>
+      <Col md={6}>
+        <p><strong>Average time to finish tasks by priority:</strong></p>
+        <ul>
+          <li>Low: 10:25 mins</li>
+          <li>Medium: 10:25 mins</li>
+          <li>High: 10:25 mins</li>
+        </ul>
+      </Col>
+    </Row>
+  );
 }
+

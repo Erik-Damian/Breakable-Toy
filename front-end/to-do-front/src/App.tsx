@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import ScreenComponent from './SampleScreen';
+import ScreenComponent from './screens/main/SampleScreen';
 import { NewTodoForm } from './components/newTodoForm/NewTodoForm';
 import bootstrap from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
