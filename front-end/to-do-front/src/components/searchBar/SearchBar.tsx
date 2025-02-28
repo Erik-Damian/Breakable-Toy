@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Form, Table, Container, Row, Col, Pagination } from 'react-bootstrap';
+import ThemeSwitcher from '../themeSwitcher/ThemeSwitcher';
 
 interface SearchBarProps {
   nameFilter: string;
@@ -38,6 +39,7 @@ export default function SearchBar({ nameFilter, setNameFilter, priorityFilter, s
         onChange={(e) => setStateFilter(e.target.checked)}
         className="mt-2"
       />
+      <ThemeSwitcher />
     </Form>
   );
 }

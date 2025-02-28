@@ -1,119 +1,119 @@
-import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import { AppDispatch } from '../../store/store';
+// NewTodoForm.tsx
+import React, { useState } from 'react';
+import { Button, Modal, Col, Form, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
 import { Task } from '../../interfaces/TaskInterface';
 import { createTask } from '../../store/actions';
-import bootstrap from 'bootstrap';
+import { useTheme } from '../../context/ThemeContext';
 
 interface ModalProps {
     show: boolean;
-    onCancel: any;
-    setShow: any;
-    setStart: any;
+    onCancel: () => void;
+    setShow: (show: boolean) => void;
+    setStart: (start: boolean) => void;
     start: boolean;
 }
 
-export function NewTodoForm(props : ModalProps){
-
+export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalProps) {
     const dispatch = useDispatch<AppDispatch>();
-    const [validated, setValidate] = useState(false);
+    const [validated, setValidated] = useState(false);
     const [text, setText] = useState('');
     const [priority, setPriority] = useState('Low');
-    const [date, setDate] = useState(Date());
+    const [date, setDate] = useState(new Date().toISOString());
     const [dueDated, setDueDated] = useState(false);
+    const { theme } = useTheme();
 
-    const handleSubmit = () => {
-        if(validated){
-            const newTask:Task = {description: text, priority: priority};
-            if(dueDated)
-                newTask.dueDate = new Date(date);
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setValidated(true);
+        if (event.currentTarget.checkValidity()) {
+            const newTask: Task = { description: text, priority: priority };
+            if (dueDated) newTask.dueDate = new Date(date);
             dispatch(createTask(newTask))
-            .then(() => {
-            alert('Task added successfully!');
-        setText('');
-        setDate(Date());
-        setPriority('Low');
-        props.setShow(false);
-        props.setStart(!props.start);
-      })
-      .catch((error) => {
-        console.error('Error adding task:', error);
-        alert('Failed to add the task.');
-      });
+                .then(() => {
+                    alert('Task added successfully!');
+                    resetForm();
+                })
+                .catch((error) => {
+                    console.error('Error adding task:', error);
+                    alert('Failed to add the task.');
+                });
         }
-    }
+    };
+
+    const resetForm = () => {
+        setText('');
+        setDate(new Date().toISOString());
+        setPriority('Low');
+        setShow(false);
+        setStart(!start);
+    };
+
+    const handleClose = () => setShow(false);
 
     return (
-        <Modal
-            show={props.show}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
+        <Modal show={show} onHide={handleClose} centered data-bs-theme={theme}>
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Modal heading
-                </Modal.Title>
+                <Modal.Title style={{ color: theme === 'dark' ? '#dddddd' : '' }}>Add New Task</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row className="mb-1">
-                    <Form.Group as={Col} md="4" controlId="title">
-                        <Form.Label>Title *</Form.Label>
-                        <Form.Control
-                            required
-                            maxLength={120}
-                            type="text"
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                            placeholder="Describe the task" />
-                        <Form.Control.Feedback type='invalid'>The title should be at most 20 letters long</Form.Control.Feedback>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                    <Form.Group as={Row} controlId="formTaskDescription" className="mb-3">
+                        <Form.Label column sm={3} style={{ color: theme === 'dark' ? '#dddddd' : '', textAlign: 'left' }}>Description</Form.Label>
+                        <Col sm={9}>
+                            <Form.Control
+                                required
+                                type="text"
+                                placeholder="Enter task description"
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a task description.
+                            </Form.Control.Feedback>
+                        </Col>
                     </Form.Group>
-                    </Row>
-                    <Row className='mb-2'>
-                    <Form.Group as={Col} md="4" controlId="Priority">
-                        <Form.Label>Priority *</Form.Label>
-                        <Form.Select value={priority} onChange={(e) => setPriority(e.target.value)}>
-                            <option>High</option>
-                            <option>Medium</option>
-                            <option>Low</option>
-                        </Form.Select>
-                        <Form.Control.Feedback type='invalid'>Select a priority</Form.Control.Feedback>
+                    <Form.Group as={Row} controlId="formTaskPriority" className="mb-3">
+                        <Form.Label column sm={3} style={{ color: theme === 'dark' ? '#dddddd' : '', textAlign: 'left' }}>Priority</Form.Label>
+                        <Col sm={9}>
+                            <Form.Control
+                                as="select"
+                                value={priority}
+                                onChange={(e) => setPriority(e.target.value)}
+                            >
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                            </Form.Control>
+                        </Col>
                     </Form.Group>
-                    <Form.Group as={Col} md="4" controlId="dueDate">
-                    <Form.Check inline
-                    label="Due date"
-                    name="Dua date"
-                    checked={dueDated}
-                    onChange={(e) => setDueDated(!dueDated)}
-                  />
-                  {dueDated &&
-                                            <Form.Group>
-                                             <Form.Control
-                                                 type="date"
-                                                 placeholder="Due date"
-                                                 aria-describedby="datePicker"
-                                                 value={date}
-                                                 onChange={(e) => setDate(e.target.value)}
-                                                 />
-                                             <Form.Control.Feedback type="invalid">
-                                                 Please choose a valid date.
-                                             </Form.Control.Feedback>
-                                            </Form.Group>
-                      }
+                    <Form.Group as={Row} controlId="formTaskDueDate" className="mb-3">
+                        <Form.Label column sm={3} style={{ color: theme === 'dark' ? '#dddddd' : '', textAlign: 'left' }}>Due Date</Form.Label>
+                        <Col sm={9} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <Form.Check
+                                type="checkbox"
+                                label="Set due date"
+                                style={{ color: theme === 'dark' ? '#dddddd' : '' }}
+                                checked={dueDated}
+                                onChange={(e) => setDueDated(e.target.checked)}
+                            />
+                            <Form.Control
+                                type="datetime-local"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                disabled={!dueDated}
+                            />
+                        </Col>
                     </Form.Group>
-                </Row>
-                <Button type="submit" variant='primary'>Create Task</Button>
-                <Button onClick={props.onCancel} variant='secondary'>Cancel</Button>
-            </Form>
-        </Modal.Body>
-        <Modal.Footer>
-            </Modal.Footer>
-      </Modal>
-    )
-  }
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '5px' }}>
+                        <Button variant="primary" type="submit">
+                            Add Task
+                        </Button>
+                        <Button onClick={onCancel} variant='secondary'>Cancel</Button>
+                    </div>
+                </Form>
+            </Modal.Body>
+        </Modal>
+    );
+}
