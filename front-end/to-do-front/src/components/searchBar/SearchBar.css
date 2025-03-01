@@ -1,0 +1,33 @@
+.form-check-theme-switcher {
+    display: flex;
+    justify-content: space-between;
+    width: 25%;
+    align-items: center;
+  }
+
+  .form{
+    display: flex;
+    flex-direction: row;
+}
+
+  .form-controls {
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-direction: row;
+    width: 75%;
+    align-items: center;
+  }
+
+@media (max-width: 767px) {
+    .form-controls {
+      flex-direction: column;
+        width: 100%;
+    }
+    .form-check-theme-switcher {
+      width: 100%;
+    }
+
+    .form{
+        display: inline;
+    }
+  }

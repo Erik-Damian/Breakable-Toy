@@ -14,7 +14,6 @@ const ThemeSwitcher = () => {
             checked={theme === 'dark'}
             onChange={toggleTheme}
             style={{ color: theme === 'dark' ? '#dddddd' : '' }}
-            data-bs-theme={theme}
         />
     );
 };

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Table, Container, Row, Col, Pagination } from 'react-bootstrap';
+import { Button, Form, Table, Container, Row, Col, Pagination, Stack } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Task } from '../../interfaces/TaskInterface';
 import { useTheme } from '../../context/ThemeContext';
@@ -32,12 +32,14 @@ export default function TaskTable({ filteredTasks, setShow } : TableProps) {
               return (
                 <tr key={index}>
                   <td><Form.Check inline checked={task.completed} /></td>
-                  <td>{task.description}</td>
+                  <td className='w-50' style={{textAlign: "left"}}>{task.description}</td>
                   <td>{task.priority}</td>
                   <td>{formattedDate}</td>
                   <td>
-                    <Button variant="primary" onClick={() => setShow(true)}>Edit</Button>
-                    <Button variant="danger" className="ml-2">Delete</Button>
+                    <Stack direction="horizontal" gap={3} className="justify-content-center">
+                      <Button variant="primary" onClick={() => setShow(true)}>Edit</Button>
+                      <Button variant="danger">Delete</Button>
+                    </Stack>
                   </td>
                 </tr>
               );

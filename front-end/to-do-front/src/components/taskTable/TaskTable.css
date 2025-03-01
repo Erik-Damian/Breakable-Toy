@@ -1,6 +1,18 @@
+td{
+    vertical-align: middle;
+}
+
 @media (min-width: 768px) {
     .fixed-height-table {
       height: 720px; /* Adjust the height as needed */
-      overflow: scroll
+      overflow: scroll;
     }
   }
+
+@media (max-width: 767px) {
+    .fixed-height-table {
+        width: 100%;
+        overflow-x: scroll;
+    }
+    
+}
