@@ -13,6 +13,8 @@ const ThemeSwitcher = () => {
             label={theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
             checked={theme === 'dark'}
             onChange={toggleTheme}
+            style={{ color: theme === 'dark' ? '#dddddd' : '' }}
+            data-bs-theme={theme}
         />
     );
 };

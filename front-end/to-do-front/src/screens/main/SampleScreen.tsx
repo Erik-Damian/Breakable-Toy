@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
-import '../../App.css'
-import { Button, Form, Table, Container, Row, Col, Pagination } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTasks } from '../../store/actions';
-import { AppDispatch, RootState } from '../../store/store';
-import bootstrap from 'bootstrap';
+import { Container, Row, Col, } from 'react-bootstrap';
 import StatsTab from '../../components/statsTab/StatsTab';
 import TaskTable from '../../components/taskTable/TaskTable';
 import SearchBar from '../../components/searchBar/SearchBar';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTasks } from '../../store/actions';
+import { AppDispatch, RootState } from '../../store/store';
+import { useTheme } from '../../context/ThemeContext';
 
-function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: boolean }) {
+
+export default function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: boolean }) {
   const [nameFilter, setNameFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [stateFilter, setStateFilter] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme();
 
   const { tasks, loading, error } = useSelector((state: RootState) => state.tasks);
 
@@ -37,7 +38,7 @@ function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: boole
   }
 
   return (
-    <Container>
+    <Container data-bs-theme={theme}>
       <Row className="my-3">
         <Col md={12}>
           <SearchBar
@@ -59,5 +60,3 @@ function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: boole
     </Container>
   );
 }
-
-export default ScreenComponent;

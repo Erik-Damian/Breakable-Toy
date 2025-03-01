@@ -1,6 +1,7 @@
-import React from 'react'
-import { Button, Form, Table, Container, Row, Col, Pagination } from 'react-bootstrap';
+import React from 'react';
+import { Form } from 'react-bootstrap';
 import ThemeSwitcher from '../themeSwitcher/ThemeSwitcher';
+import { useTheme } from '../../context/ThemeContext';
 
 interface SearchBarProps {
   nameFilter: string;
@@ -12,8 +13,10 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ nameFilter, setNameFilter, priorityFilter, setPriorityFilter, stateFilter, setStateFilter }: SearchBarProps) {
+  const {theme} = useTheme();
+
   return (
-    <Form className="d-flex">
+    <Form className="d-flex" data-bs-theme={theme}>
       <Form.Control
         type="text"
         placeholder="Task Name"
@@ -34,10 +37,11 @@ export default function SearchBar({ nameFilter, setNameFilter, priorityFilter, s
       </Form.Control>
       <Form.Check
         type="checkbox"
-        label="Completed"
+        label="Show Completed"
         checked={stateFilter}
         onChange={(e) => setStateFilter(e.target.checked)}
         className="mt-2"
+        style={{ color: theme === 'dark' ? '#dddddd' : '' }}
       />
       <ThemeSwitcher />
     </Form>

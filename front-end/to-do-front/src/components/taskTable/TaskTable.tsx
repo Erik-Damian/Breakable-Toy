@@ -2,6 +2,8 @@ import React from 'react'
 import { Button, Form, Table, Container, Row, Col, Pagination } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Task } from '../../interfaces/TaskInterface';
+import { useTheme } from '../../context/ThemeContext';
+import './TaskTable.css';
 
 interface TableProps {
     filteredTasks: Task[];
@@ -9,9 +11,11 @@ interface TableProps {
 }
 
 export default function TaskTable({ filteredTasks, setShow } : TableProps) {
+  const {theme} = useTheme();
     return (
       <>
-        <Table striped bordered hover>
+      <div className="fixed-height-table">
+        <Table striped bordered hover variant={theme}>
           <thead>
             <tr>
               <th>Completed</th>
@@ -40,7 +44,8 @@ export default function TaskTable({ filteredTasks, setShow } : TableProps) {
             })}
           </tbody>
         </Table>
-        <Pagination>
+      </div>
+        <Pagination data-bs-theme={theme}>
           <Pagination.Prev />
           <Pagination.Item active>1</Pagination.Item>
           <Pagination.Item>2</Pagination.Item>
