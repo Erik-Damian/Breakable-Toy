@@ -3,7 +3,7 @@ import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Task } from '../../interfaces/TaskInterface';
 import { useTheme } from '../../context/ThemeContext';
-import { createTask } from '../../store/actions';
+import { createTask } from '../../store/TaskSlice';
 import { AppDispatch } from '../../store/store';
 
 interface ModalProps {

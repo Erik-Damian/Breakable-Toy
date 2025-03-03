@@ -4,7 +4,7 @@ import StatsTab from '../../components/statsTab/StatsTab';
 import TaskTable from '../../components/taskTable/TaskTable';
 import SearchBar from '../../components/searchBar/SearchBar';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTasks } from '../../store/actions';
+import { fetchTasks } from '../../store/TaskSlice';
 import { AppDispatch, RootState } from '../../store/store';
 import { useTheme } from '../../context/ThemeContext';
 
