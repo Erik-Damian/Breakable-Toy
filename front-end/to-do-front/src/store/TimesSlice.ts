@@ -21,7 +21,7 @@ const initialState: TimesState = {
 
 // Async thunks to fetch average times
 export const fetchAverageAll = createAsyncThunk('times/fetchAverageAll', async () => {
-  const response = await axios.get('http://localhost:8080/api/tasks/average');
+  const response = await axios.get('http://localhost:8080/api/tasks/stats/average');
   return response.data;
 });
 
