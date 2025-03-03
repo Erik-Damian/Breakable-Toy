@@ -8,50 +8,76 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
-    private final TaskService taskService;
+
+    private static final Logger logger = Logger.getLogger(TaskController.class.getName());
 
     @Autowired
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
+    private TaskService taskService;
 
+    // Create a new task
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
         taskService.addTask(task);
+        logger.info("Task created: " + task);
         return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
+    // Get all tasks
     @GetMapping
     public ResponseEntity<List<Task>> getAllTasks() {
-        return new ResponseEntity<>(taskService.getAllTasks(), HttpStatus.OK);
+        List<Task> tasks = taskService.getAllTasks();
+        logger.info("Retrieved all tasks");
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
+    // Get a task by ID
     @GetMapping("/{taskId}")
     public ResponseEntity<Task> getTask(@PathVariable int taskId) {
-        Task task = taskService.getTask(taskId);
-        if (task != null) {
-            return new ResponseEntity<>(task, HttpStatus.OK);
+        Optional<Task> task = taskService.getTask(taskId);
+        if (task.isPresent()) {
+            logger.info("Task retrieved with ID: " + taskId);
+            return new ResponseEntity<>(task.get(), HttpStatus.OK);
         } else {
+            logger.warning("Task not found with ID: " + taskId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+    // Update a task by ID
     @PutMapping("/{taskId}")
     public ResponseEntity<Task> updateTask(@PathVariable int taskId, @RequestBody Task updatedTask) {
-        taskService.updateTask(updatedTask);
-        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        Optional<Task> existingTask = taskService.getTask(taskId);
+        if (existingTask.isPresent()) {
+            taskService.updateTask(updatedTask);
+            logger.info("Task updated with ID: " + taskId);
+            return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        } else {
+            logger.warning("Task not found with ID: " + taskId);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
+    // Delete a task by ID
     @DeleteMapping("/{taskId}")
     public ResponseEntity<HttpStatus> deleteTask(@PathVariable int taskId) {
-        taskService.removeTask(taskId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Optional<Task> existingTask = taskService.getTask(taskId);
+        if (existingTask.isPresent()) {
+            taskService.removeTask(taskId);
+            logger.info("Task deleted with ID: " + taskId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            logger.warning("Task not found with ID: " + taskId);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
+    // Get filtered tasks by search text, due date, status, and priority
     @GetMapping("/filter")
     public ResponseEntity<List<Task>> getFilteredTasks(
             @RequestParam(required = false) String searchText,
@@ -61,21 +87,18 @@ public class TaskController {
         List<Task> filteredTasks = taskService.filterTasks(searchText, dueDate, status, priority);
         return new ResponseEntity<>(filteredTasks, HttpStatus.OK);
     }
-    @GetMapping("/average")
-    public ResponseEntity<Double> getAverageTime(){
-        double response = taskService.getAverageTimeToComplete(null);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    @GetMapping("/average/{priority}")
-    public ResponseEntity<Double> getAverageTimeWithPriority(@PathVariable String priority){
-        double response = taskService.getAverageTimeToComplete(priority);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
+    // Toggle task completion status by ID
     @PutMapping("/toggle/{taskId}")
     public ResponseEntity<Task> toggleTask(@PathVariable int taskId) {
-        Task updatedTask = taskService.getTask(taskId);
-        taskService.toggleTask(updatedTask);
-        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        Optional<Task> existingTask = taskService.getTask(taskId);
+        if (existingTask.isPresent()) {
+            taskService.toggleTask(existingTask.get());
+            logger.info("Task toggled with ID: " + taskId);
+            return new ResponseEntity<>(existingTask.get(), HttpStatus.OK);
+        } else {
+            logger.warning("Task not found with ID: " + taskId);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

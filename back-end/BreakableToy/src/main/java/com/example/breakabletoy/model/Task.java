@@ -5,7 +5,7 @@ public class Task {
 
     private int id;
 
-    public Task(int i, String s, String s1, String date, String date1, boolean b, String priority) {
+    public <Optional>Task(int i, String s, String s1, String date, String date1, boolean b, String priority) {
     }
 
     private String Priority;
