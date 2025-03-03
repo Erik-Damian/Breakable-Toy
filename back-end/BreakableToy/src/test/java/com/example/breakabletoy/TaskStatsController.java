@@ -37,9 +37,9 @@ class TaskStatsControllerTest {
     @Test
     void getAverageTimeWithPriority() {
         when(taskService.getAverageTimeToCompleteFiltered("high")).thenReturn(60.0);
-        ResponseEntity<Double> response = taskStatsController.getAverageTimeWithPriority("high");
+        ResponseEntity<String> response = taskStatsController.getAverageTimeWithPriority("high");
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(60.0, response.getBody());
+        assertEquals("60.0", response.getBody());
     }
 
     @Test

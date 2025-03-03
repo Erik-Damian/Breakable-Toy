@@ -27,10 +27,20 @@ public class TaskStatsController {
 
     // Get average time to complete tasks by priority
     @GetMapping("/average/{priority}")
-    public ResponseEntity<Double> getAverageTimeWithPriority(@PathVariable String priority) {
-        double response = taskService.getAverageTimeToCompleteFiltered(priority);
-        logger.info("Retrieved average time to complete tasks with priority: " + priority);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<String> getAverageTimeWithPriority(@PathVariable String priority) {
+        priority = priority.toLowerCase();
+        switch (priority) {
+            case "high":
+            case "medium":
+            case "low":
+                priority = priority.substring(0, 1).toUpperCase() + priority.substring(1);
+                double response = taskService.getAverageTimeToCompleteFiltered(priority);
+                logger.info("Retrieved average time to complete tasks with priority: " + priority);
+                return new ResponseEntity<>(String.valueOf(response), HttpStatus.OK);
+            default:
+                logger.warning("Invalid priority: " + priority);
+                return new ResponseEntity<>("Invalid priority. Allowed values are: High, Medium, Low.", HttpStatus.BAD_REQUEST);
+        }
     }
 
     // Get total count of tasks
