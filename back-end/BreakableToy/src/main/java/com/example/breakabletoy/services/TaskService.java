@@ -63,11 +63,20 @@ public class TaskService {
         });
     }
 
-    // Get average time to complete tasks, optionally filtered by priority
-    public double getAverageTimeToComplete(String priority) {
+    // Get average time to complete tasks, filtered by priority
+    public double getAverageTimeToCompleteFiltered(String priority) {
         return tasks.stream()
                 .filter(Task::getCompleted)
                 .filter(task -> task.getPriority().equals(priority))
+                .mapToDouble(Task::getTimeToComplete)
+                .average()
+                .orElse(Double.NaN);
+    }
+
+    // Get average time to complete tasks
+    public double getAverageTimeToComplete() {
+        return tasks.stream()
+                .filter(Task::getCompleted)
                 .mapToDouble(Task::getTimeToComplete)
                 .average()
                 .orElse(Double.NaN);

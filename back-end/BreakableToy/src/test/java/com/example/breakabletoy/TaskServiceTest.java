@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class TaskServiceTest {
 
@@ -82,7 +81,7 @@ class TaskServiceTest {
         Task task2 = new Task(2, "Test Task 2", true, LocalDateTime.now(), LocalDateTime.now().plusHours(2), LocalDateTime.now(), "medium");
         tasks.add(task1);
         tasks.add(task2);
-        double averageTime = taskService.getAverageTimeToComplete(null);
+        double averageTime = taskService.getAverageTimeToComplete();
         assertEquals(90, averageTime);
     }
 

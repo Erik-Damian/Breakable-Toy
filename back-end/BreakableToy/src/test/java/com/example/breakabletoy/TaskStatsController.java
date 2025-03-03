@@ -28,7 +28,7 @@ class TaskStatsControllerTest {
 
     @Test
     void getAverageTime() {
-        when(taskService.getAverageTimeToComplete(null)).thenReturn(90.0);
+        when(taskService.getAverageTimeToComplete()).thenReturn(90.0);
         ResponseEntity<Double> response = taskStatsController.getAverageTime();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(90.0, response.getBody());
@@ -36,7 +36,7 @@ class TaskStatsControllerTest {
 
     @Test
     void getAverageTimeWithPriority() {
-        when(taskService.getAverageTimeToComplete("high")).thenReturn(60.0);
+        when(taskService.getAverageTimeToCompleteFiltered("high")).thenReturn(60.0);
         ResponseEntity<Double> response = taskStatsController.getAverageTimeWithPriority("high");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(60.0, response.getBody());

@@ -20,7 +20,7 @@ public class TaskStatsController {
     // Get average time to complete tasks
     @GetMapping("/average")
     public ResponseEntity<Double> getAverageTime() {
-        double response = taskService.getAverageTimeToComplete(null);
+        double response = taskService.getAverageTimeToComplete();
         logger.info("Retrieved average time to complete tasks");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -28,7 +28,7 @@ public class TaskStatsController {
     // Get average time to complete tasks by priority
     @GetMapping("/average/{priority}")
     public ResponseEntity<Double> getAverageTimeWithPriority(@PathVariable String priority) {
-        double response = taskService.getAverageTimeToComplete(priority);
+        double response = taskService.getAverageTimeToCompleteFiltered(priority);
         logger.info("Retrieved average time to complete tasks with priority: " + priority);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
