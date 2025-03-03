@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row, Toast, ToastContainer } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Task } from '../../interfaces/TaskInterface';
 import { useTheme } from '../../context/ThemeContext';
-import { createTask } from '../../store/TaskSlice';
+import { createTask, updateTask } from '../../store/TaskSlice';
 import { AppDispatch } from '../../store/store';
 
 interface ModalProps {
@@ -21,6 +21,8 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
     const [priority, setPriority] = useState('Low');
     const [date, setDate] = useState(new Date().toISOString());
     const [dueDated, setDueDated] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [showToast, setShowToast] = useState(false);
     const { theme } = useTheme();
     const tasks = useSelector((state: any) => state.tasks);
 
@@ -45,18 +47,31 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
             if (dueDated) newTask.dueDate = new Date(date);
             if (start === -1) {
                 dispatch(createTask(newTask))
-                .then(() => {
-                    alert('Task added successfully!');
-                    resetForm();
-                    setShow(false);
-                })
-                .catch((error: any) => {
-                    console.error('Error adding task:', error);
-                    alert('Failed to add the task.');
-                });
+                    .then(() => {
+                        setToastMessage('✅ Task added successfully!');
+                        setShowToast(true);
+                        resetForm();
+                        setShow(false);
+                    })
+                    .catch((error: any) => {
+                        console.error('Error adding task:', error);
+                        setToastMessage('🚫 Failed to add the task.');
+                        setShowToast(true);
+                    });
             } else {
-                console.log('Update task:', newTask);
-                // Dispatch update task action here
+                const taskId = tasks.tasks[start].id;
+                dispatch(updateTask({ id: taskId, task: newTask }))
+                    .then(() => {
+                        setToastMessage('✅ Task updated successfully!');
+                        setShowToast(true);
+                        resetForm();
+                        setShow(false);
+                    })
+                    .catch((error: any) => {
+                        console.error('Error updating task:', error);
+                        setToastMessage('🚫 Failed to update the task.');
+                        setShowToast(true);
+                    });
             }
         }
     };
@@ -70,7 +85,7 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
     const handleClose = () => setShow(false);
 
     return (
-        <Modal show={show} onHide={handleClose} centered data-bs-theme={theme}>
+        <><Modal show={show} onHide={handleClose} centered data-bs-theme={theme}>
             <Modal.Header closeButton>
                 <Modal.Title style={{ color: theme === 'dark' ? '#dddddd' : '' }}>Add New Task</Modal.Title>
             </Modal.Header>
@@ -84,8 +99,7 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
                                 type="text"
                                 placeholder="Enter task description"
                                 value={text}
-                                onChange={(e) => setText(e.target.value)}
-                            />
+                                onChange={(e) => setText(e.target.value)} />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a task description.
                             </Form.Control.Feedback>
@@ -113,24 +127,28 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
                                 label="Set due date"
                                 style={{ color: theme === 'dark' ? '#dddddd' : '' }}
                                 checked={dueDated}
-                                onChange={(e) => setDueDated(e.target.checked)}
-                            />
+                                onChange={(e) => setDueDated(e.target.checked)} />
                             <Form.Control
                                 type="datetime-local"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                disabled={!dueDated}
-                            />
+                                disabled={!dueDated} />
                         </Col>
                     </Form.Group>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '5px' }}>
                         <Button variant="primary" type="submit">
-                            Add Task
+                            {start === -1 ? 'Add Task' : 'Update Task'}
                         </Button>
                         <Button onClick={onCancel} variant='secondary'>Cancel</Button>
                     </div>
                 </Form>
             </Modal.Body>
         </Modal>
+        <ToastContainer position="top-end" className="p-3" >
+            <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide data-bs-theme={theme}>
+                    <Toast.Body style={{ color: theme === 'dark' ? '#dddddd' : ''}}>{toastMessage}</Toast.Body>
+            </Toast>
+        </ToastContainer>
+        </>
     );
 }
