@@ -144,7 +144,7 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
                 </Form>
             </Modal.Body>
         </Modal>
-        <ToastContainer position="top-end" className="p-3" >
+        <ToastContainer position="bottom-start" className="p-3" >
             <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide data-bs-theme={theme}>
                     <Toast.Body style={{ color: theme === 'dark' ? '#dddddd' : ''}}>{toastMessage}</Toast.Body>
             </Toast>

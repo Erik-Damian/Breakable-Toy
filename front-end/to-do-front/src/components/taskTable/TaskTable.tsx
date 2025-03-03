@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Table, Container, Row, Col, Pagination, Stack } from 'react-bootstrap';
+import { Button, Form, Table, Container, Row, Col, Pagination, Stack,} from 'react-bootstrap';
 import { Task } from '../../interfaces/TaskInterface';
 import { useTheme } from '../../context/ThemeContext';
 import './TaskTable.css';
 import TableErrorMessage from '../tableErrorMessage/TableErrorMessage';
+import { AppDispatch } from '../../store/store';
+import { useDispatch } from 'react-redux';
+import { deleteTask, toggleTaskStatus } from '../../store/TaskSlice';
 
 interface TableProps {
     filteredTasks: Task[];
@@ -12,8 +15,10 @@ interface TableProps {
 }
 
 export default function TaskTable({ filteredTasks, setShow, setStart } : TableProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const {theme} = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
+  const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
   const tasksPerPage = 12;
   const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
@@ -29,6 +34,26 @@ export default function TaskTable({ filteredTasks, setShow, setStart } : TablePr
     setStart(index);
     setShow(true);
   }
+
+  const handleToggle = (taskId: number, completed: boolean) => {
+    dispatch(toggleTaskStatus(taskId))
+      .then(() => {
+        console.log('Task status toggled successfully');
+      })
+      .catch((error: any) => {
+        console.error('Error toggling task status:', error);
+      });
+  };
+
+  const handleDelete = (taskId: number) => {
+    dispatch(deleteTask(taskId))
+      .then(() => {
+        console.log('Task deleted successfully');
+      })
+      .catch((error: any) => {
+        console.error('Error deleting task:', error);
+      });
+  };
 
   const startIndex = (currentPage - 1) * tasksPerPage;
   const currentTasks = filteredTasks.slice(startIndex, startIndex + tasksPerPage);
@@ -62,14 +87,26 @@ export default function TaskTable({ filteredTasks, setShow, setStart } : TablePr
                   const formattedDate = dueDate ? `${dueDate.getDate()}/${dueDate.getMonth() + 1}/${dueDate.getFullYear()}` : 'N/A';
                   return (
                     <tr key={index}>
-                      <td><Form.Check inline checked={task.completed} /></td>
+                      <td><Form.Check inline checked={task.completed}  onChange={() => task.id !== undefined && handleToggle(task.id, !task.completed)}/></td>
                       <td className='w-50' style={{textAlign: "left"}}>{task.description}</td>
                       <td>{task.priority}</td>
                       <td>{formattedDate}</td>
                       <td>
                         <Stack direction="horizontal" gap={3} className="justify-content-center">
                           <Button variant="primary" onClick={() => handleEdit(index)}>Edit</Button>
-                          <Button variant="danger">Delete</Button>
+                          {confirmDelete === task.id ? (
+                          <>
+                            <Stack gap={0} className="justify-content-center">
+                              <span>Are you sure?</span>
+                              <Stack direction="horizontal" gap={1} className="justify-content-center">
+                                <Button variant="danger" size="sm" onClick={() => task.id !== undefined && handleDelete(task.id)}>Yes</Button>
+                                <Button variant="secondary" size="sm" onClick={() => setConfirmDelete(null)}>No</Button>
+                              </Stack>
+                            </Stack>
+                          </>
+                          ) : (
+                            <Button variant="danger" onClick={() => task.id !== undefined && setConfirmDelete(task.id)}>Delete</Button>
+                          )}
                         </Stack>
                       </td>
                     </tr>
