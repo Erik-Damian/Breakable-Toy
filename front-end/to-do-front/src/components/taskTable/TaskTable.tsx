@@ -3,6 +3,7 @@ import { Button, Form, Table, Container, Row, Col, Pagination, Stack } from 'rea
 import { Task } from '../../interfaces/TaskInterface';
 import { useTheme } from '../../context/ThemeContext';
 import './TaskTable.css';
+import TableErrorMessage from '../tableErrorMessage/TableErrorMessage';
 
 interface TableProps {
     filteredTasks: Task[];
@@ -36,7 +37,14 @@ export default function TaskTable({ filteredTasks, setShow, setStart } : TablePr
     <>
       <div className="fixed-height-table">
         {filteredTasks.length === 0 ? (
-          <p>No tasks to show</p>
+          <Container>
+            <Row>
+              <Col>
+                <TableErrorMessage />
+                <Button variant="primary" onClick={() => setShow(true)}>Add Task</Button>
+              </Col>
+            </Row>
+          </Container>
         ) : (
           <>
             <Table striped bordered hover variant={theme}>
