@@ -4,7 +4,7 @@ td{
 
 @media (min-width: 768px) {
     .fixed-height-table {
-      height: 720px; /* Adjust the height as needed */
+      height: 718px; /* Adjust the height as needed */
       overflow: scroll;
     }
   }

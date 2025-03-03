@@ -40,90 +40,44 @@ export const toggleTaskStatus = createAsyncThunk('tasks/toggleTaskStatus', async
   return response.data;
 });
 
+// Helper function to handle extra reducers
+const handleAsyncTaskActions = (builder: any, thunk: any, key: keyof TaskListInterface, isArray: boolean = false) => {
+  builder
+    .addCase(thunk.pending, (state: TaskListInterface) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(thunk.fulfilled, (state: TaskListInterface, action: PayloadAction<any>) => {
+      state.loading = false;
+      if (isArray) {
+        (state[key] as unknown as Task[]) = action.payload;
+      } else {
+        const index = state.tasks.findIndex((task: Task) => task.id === action.payload.id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload;
+        } else {
+          state.tasks.push(action.payload);
+        }
+      }
+    })
+    .addCase(thunk.rejected, (state: TaskListInterface, action: any) => {
+      state.loading = false;
+      state.error = action.error.message || `Failed to ${key}`;
+    });
+};
+
 // Slice, encapsulating all the actions
 const TaskSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      // Fetch tasks
-      .addCase(fetchTasks.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchTasks.fulfilled, (state, { payload }: PayloadAction<Task[]>) => {
-        state.tasks = payload;
-        state.loading = false;
-      })
-      .addCase(fetchTasks.rejected, (state, { error }) => {
-        state.loading = false;
-        state.error = ((error.name || '') + error.message + error.code) || 'Failed to fetch tasks';
-      })
-      
-      // Create task
-      .addCase(createTask.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createTask.fulfilled, (state, { payload }: PayloadAction<Task>) => {
-        state.tasks.push(payload);
-        state.loading = false;
-      })
-      .addCase(createTask.rejected, (state, { error }) => {
-        state.loading = false;
-        state.error = error.message || 'Failed to create task';
-      })
-      
-      // Update task
-      .addCase(updateTask.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateTask.fulfilled, (state, { payload }: PayloadAction<Task>) => {
-        const index = state.tasks.findIndex((task: Task) => task.id === payload.id);
-        if (index !== -1) {
-          state.tasks[index] = payload;
-        }
-        state.loading = false;
-      })
-      .addCase(updateTask.rejected, (state, { error }) => {
-        state.loading = false;
-        state.error = error.message || 'Failed to update task';
-      })
-      
-      // Delete task
-      .addCase(deleteTask.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(deleteTask.fulfilled, (state, { payload }: PayloadAction<number>) => {
-        state.tasks = state.tasks.filter((task: Task) => task.id !== payload);
-        state.loading = false;
-      })
-      .addCase(deleteTask.rejected, (state, { error }) => {
-        state.loading = false;
-        state.error = error.message || 'Failed to delete task';
-      })
-      
-      // Toggle task status
-      .addCase(toggleTaskStatus.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(toggleTaskStatus.fulfilled, (state, { payload }: PayloadAction<Task>) => {
-        const index = state.tasks.findIndex((task: Task) => task.id === payload.id);
-        if (index !== -1) {
-          state.tasks[index] = payload;
-        }
-        state.loading = false;
-      })
-      .addCase(toggleTaskStatus.rejected, (state, { error }) => {
-        state.loading = false;
-        state.error = error.message || 'Failed to toggle task status';
-      });
+    handleAsyncTaskActions(builder, fetchTasks, 'tasks', true);
+    handleAsyncTaskActions(builder, createTask, 'tasks');
+    handleAsyncTaskActions(builder, updateTask, 'tasks');
+    handleAsyncTaskActions(builder, deleteTask, 'tasks');
+    handleAsyncTaskActions(builder, toggleTaskStatus, 'tasks');
   },
 });
 
 export default TaskSlice.reducer;
-

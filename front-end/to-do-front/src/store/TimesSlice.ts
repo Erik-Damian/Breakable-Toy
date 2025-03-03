@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 interface TimesState {
@@ -19,81 +19,46 @@ const initialState: TimesState = {
   error: null,
 };
 
+// General function to create async thunks
+const createFetchAverageThunk = (type: string, url: string) => {
+  return createAsyncThunk(type, async () => {
+    const response = await axios.get(url);
+    return response.data;
+  });
+};
+
 // Async thunks to fetch average times
-export const fetchAverageAll = createAsyncThunk('times/fetchAverageAll', async () => {
-  const response = await axios.get('http://localhost:8080/api/tasks/stats/average');
-  return response.data;
-});
+export const fetchAverageAll = createFetchAverageThunk('times/fetchAverageAll', 'http://localhost:8080/api/tasks/stats/average');
+export const fetchAverageLow = createFetchAverageThunk('times/fetchAverageLow', 'http://localhost:8080/api/tasks/stats/average/low');
+export const fetchAverageMedium = createFetchAverageThunk('times/fetchAverageMedium', 'http://localhost:8080/api/tasks/stats/average/medium');
+export const fetchAverageHigh = createFetchAverageThunk('times/fetchAverageHigh', 'http://localhost:8080/api/tasks/stats/average/high');
 
-export const fetchAverageLow = createAsyncThunk('times/fetchAverageLow', async () => {
-  const response = await axios.get('http://localhost:8080/api/tasks/stats/average/low');
-  return response.data;
-});
-
-export const fetchAverageMedium = createAsyncThunk('times/fetchAverageMedium', async () => {
-  const response = await axios.get('http://localhost:8080/api/tasks/stats/average/medium');
-  return response.data;
-});
-
-export const fetchAverageHigh = createAsyncThunk('times/fetchAverageHigh', async () => {
-  const response = await axios.get('http://localhost:8080/api/tasks/stats/average/high');
-  return response.data;
-});
+// Helper function to handle extra reducers
+const handleAsyncActions = (builder: any, thunk: any, key: 'averageAll' | 'averageLow' | 'averageMedium' | 'averageHigh') => {
+  builder
+    .addCase(thunk.pending, (state: TimesState) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(thunk.fulfilled, (state: TimesState, action: PayloadAction<number>) => {
+      state.loading = false;
+      state[key] = action.payload;
+    })
+    .addCase(thunk.rejected, (state: TimesState, action: any) => {
+      state.loading = false;
+      state.error = action.error.message || `Failed to fetch ${key}`;
+    });
+};
 
 const timesSlice = createSlice({
   name: 'times',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchAverageAll.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAverageAll.fulfilled, (state, action) => {
-        state.loading = false;
-        state.averageAll = action.payload;
-      })
-      .addCase(fetchAverageAll.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to fetch average time for all tasks';
-      })
-      .addCase(fetchAverageLow.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAverageLow.fulfilled, (state, action) => {
-        state.loading = false;
-        state.averageLow = action.payload;
-      })
-      .addCase(fetchAverageLow.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to fetch average time for low priority tasks';
-      })
-      .addCase(fetchAverageMedium.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAverageMedium.fulfilled, (state, action) => {
-        state.loading = false;
-        state.averageMedium = action.payload;
-      })
-      .addCase(fetchAverageMedium.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to fetch average time for medium priority tasks';
-      })
-      .addCase(fetchAverageHigh.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAverageHigh.fulfilled, (state, action) => {
-        state.loading = false;
-        state.averageHigh = action.payload;
-      })
-      .addCase(fetchAverageHigh.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to fetch average time for high priority tasks';
-      });
+    handleAsyncActions(builder, fetchAverageAll, 'averageAll');
+    handleAsyncActions(builder, fetchAverageLow, 'averageLow');
+    handleAsyncActions(builder, fetchAverageMedium, 'averageMedium');
+    handleAsyncActions(builder, fetchAverageHigh, 'averageHigh');
   },
 });
 
