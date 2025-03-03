@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '../../store/store';
 import { useTheme } from '../../context/ThemeContext';
 
 
-export default function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: number }) {
+export default function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: number ; setStart: (arg0: number) => void; }) {
   const [nameFilter, setNameFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [stateFilter, setStateFilter] = useState(false);
@@ -20,7 +20,7 @@ export default function ScreenComponent(props: { setShow: (arg0: boolean) => voi
 
   useEffect(() => {
     dispatch(fetchTasks());
-  }, [dispatch, props.start]);
+  }, [dispatch]);
 
   const filteredTasks = tasks.filter((task) => {
     const matchesName = task.description.toLowerCase().includes(nameFilter.toLowerCase());
@@ -53,7 +53,7 @@ export default function ScreenComponent(props: { setShow: (arg0: boolean) => voi
       </Row>
       <Row>
         <Col md={12}>
-          <TaskTable filteredTasks={filteredTasks} setShow={props.setShow} />
+          <TaskTable filteredTasks={filteredTasks} setShow={props.setShow} setStart={props.setStart}/>
         </Col>
       </Row>
       <StatsTab />

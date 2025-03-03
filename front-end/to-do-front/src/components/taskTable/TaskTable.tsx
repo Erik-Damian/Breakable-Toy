@@ -7,9 +7,10 @@ import './TaskTable.css';
 interface TableProps {
     filteredTasks: Task[];
     setShow: (arg0: boolean) => void;
+    setStart: (arg0: number) => void;
 }
 
-export default function TaskTable({ filteredTasks, setShow } : TableProps) {
+export default function TaskTable({ filteredTasks, setShow, setStart } : TableProps) {
   const {theme} = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
   const tasksPerPage = 12;
@@ -22,6 +23,11 @@ export default function TaskTable({ filteredTasks, setShow } : TableProps) {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const handleEdit = (index: number) => {
+    setStart(index);
+    setShow(true);
+  }
 
   const startIndex = (currentPage - 1) * tasksPerPage;
   const currentTasks = filteredTasks.slice(startIndex, startIndex + tasksPerPage);
@@ -55,7 +61,7 @@ export default function TaskTable({ filteredTasks, setShow } : TableProps) {
                       <td>{formattedDate}</td>
                       <td>
                         <Stack direction="horizontal" gap={3} className="justify-content-center">
-                          <Button variant="primary" onClick={() => setShow(true)}>Edit</Button>
+                          <Button variant="primary" onClick={() => handleEdit(index)}>Edit</Button>
                           <Button variant="danger">Delete</Button>
                         </Stack>
                       </td>

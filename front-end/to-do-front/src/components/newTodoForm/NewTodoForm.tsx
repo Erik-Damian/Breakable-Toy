@@ -22,19 +22,20 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
     const [date, setDate] = useState(new Date().toISOString());
     const [dueDated, setDueDated] = useState(false);
     const { theme } = useTheme();
-    const tasks = useSelector((state: any) => state.tasks); // Adjust the selector based on your state structure
+    const tasks = useSelector((state: any) => state.tasks);
 
     useEffect(() => {
-        if (start !== -1 && tasks[start]) {
-            const task = tasks[start];
+        if (start !== -1 && tasks.tasks[start]) {
+            const task = tasks.tasks[start];
             setText(task.description);
             setPriority(task.priority);
-            setDate(task.dueDate ? new Date(task.dueDate).toISOString() : new Date().toISOString());
+            setDate(task.dueDate ? new Date(task.dueDate).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16));
             setDueDated(!!task.dueDate);
         } else {
+            console.log('No task to edit');
             resetForm();
         }
-    }, [start, tasks]);
+    }, [start,tasks]);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -47,6 +48,7 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
                 .then(() => {
                     alert('Task added successfully!');
                     resetForm();
+                    setShow(false);
                 })
                 .catch((error: any) => {
                     console.error('Error adding task:', error);
@@ -63,8 +65,6 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
         setText('');
         setDate(new Date().toISOString());
         setPriority('Low');
-        setShow(false);
-        setStart(-1);
     };
 
     const handleClose = () => setShow(false);

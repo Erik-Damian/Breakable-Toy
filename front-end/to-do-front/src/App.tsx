@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="App" style={{ backgroundColor}}>
-      <ScreenComponent setShow={setShow} start={start} />
+      <ScreenComponent setShow={setShow} start={start} setStart={setStart}/>
       <NewTodoForm show={show} onCancel={() => setShow(false)} setShow={setShow} setStart={setStart} start={start} />
       <StickyAddButton onClick={()=>setShow(true)} set={()=>setStart(-1)}/>
     </div>
