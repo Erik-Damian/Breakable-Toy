@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '../../context/ThemeContext';
+import { Button } from 'react-bootstrap';
 
 const messages = [
     "No tasks found",
@@ -18,7 +19,11 @@ const messages = [
   ];
   
 
-export default function TableErrorMessage() {
+interface TableErrorMessageProps {
+  setShow: (show: boolean) => void;
+}
+
+export default function TableErrorMessage({ setShow }: TableErrorMessageProps) {
     const {theme} = useTheme();
     const [message, setMessage] = useState("");
 
@@ -28,8 +33,11 @@ export default function TableErrorMessage() {
     }, []);
 
   return (
-    <h2 style={{ color: theme === 'dark' ? '#dddddd' : '' }}>
-    {message}. Try another search or add new tasks!
-  </h2>
+    <div style={{ height: "600px" }}>
+        <h2 style={{ color: theme === 'dark' ? '#dddddd' : '',}}>
+          {message}. Try another search or add new tasks!
+        </h2>
+        <Button variant="primary" onClick={() => setShow(true)}>Add Task</Button>
+    </div>
   )
 }

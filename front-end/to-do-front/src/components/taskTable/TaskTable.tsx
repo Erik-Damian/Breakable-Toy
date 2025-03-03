@@ -40,8 +40,7 @@ export default function TaskTable({ filteredTasks, setShow, setStart } : TablePr
           <Container>
             <Row>
               <Col>
-                <TableErrorMessage />
-                <Button variant="primary" onClick={() => setShow(true)}>Add Task</Button>
+                <TableErrorMessage setShow={setShow}/>
               </Col>
             </Row>
           </Container>

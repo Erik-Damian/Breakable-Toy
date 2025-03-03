@@ -13,8 +13,20 @@
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-  }
-  
-  .sticky-add-button:hover {
+    font-size: 16px; /* Default font size for mobile */
+}
+
+.sticky-add-button:hover {
     background-color: #0056b3;
-  }
+}
+
+/* Styles for larger screens */
+@media (min-width: 768px) {
+    .sticky-add-button {
+        bottom: 100px; /* Move up */
+        right: 100px; /* Move to the left */
+        width: 70px; /* Increase size */
+        height: 70px; /* Increase size */
+        font-size: 20px; /* Increase font size */
+    }
+}
