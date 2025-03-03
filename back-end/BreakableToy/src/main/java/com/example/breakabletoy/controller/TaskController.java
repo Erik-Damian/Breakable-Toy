@@ -22,10 +22,26 @@ public class TaskController {
 
     // Create a new task
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<String> createTask(@RequestBody Task task) {
+        String priority = task.getPriority();
+        if (priority == null || priority.isEmpty()) {
+            task.setPriority("Low");
+        } else {
+            priority = priority.toLowerCase();
+            switch (priority) {
+                case "high":
+                case "medium":
+                case "low":
+                    task.setPriority(priority.substring(0, 1).toUpperCase() + priority.substring(1));
+                    break;
+                default:
+                    logger.warning("Invalid priority: " + priority);
+                    return new ResponseEntity<>("Invalid priority. Allowed values are: High, Medium, Low.", HttpStatus.BAD_REQUEST);
+            }
+        }
         taskService.addTask(task);
         logger.info("Task created: " + task);
-        return new ResponseEntity<>(task, HttpStatus.CREATED);
+        return new ResponseEntity<>(task.toString(), HttpStatus.CREATED);
     }
 
     // Get all tasks
