@@ -88,7 +88,7 @@ public class TaskService {
             if (existingTask.getCompleted()) {
                 existingTask.setFinishDate(null);
             } else {
-                existingTask.setFinishDate(updatedTask.getFinishDate());
+                existingTask.setFinishDate(java.time.LocalDateTime.now());
             }
             existingTask.setCompleted(!existingTask.getCompleted());
             logger.info("Task toggled: " + updatedTask);
