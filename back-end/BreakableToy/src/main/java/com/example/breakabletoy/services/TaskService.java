@@ -20,7 +20,7 @@ public class TaskService {
 
     // Add a new task
     public void addTask(Task task) {
-        while(getTask(idCounter) != null){
+        while(getTask(idCounter).isPresent()){
             idCounter++;
         }
         task.setId(idCounter);
