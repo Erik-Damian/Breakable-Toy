@@ -22,7 +22,10 @@ export default function StatsTab() {
     
 
   const formatAverage = (average: number | null) => {
-    return isNaN(average as number) ? 'No data' : `${average} mins`;
+    if (average === null) {
+        return 'No data';
+    }
+    return isNaN(average) ? 'No data' : `${average.toFixed(2)} mins`;
   };
 
   return (
