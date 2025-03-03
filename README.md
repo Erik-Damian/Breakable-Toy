@@ -1,7 +1,7 @@
 
 # To-Do Application
 
-This repository hosts a simple To-Do application with a **React (TypeScript)** front end and a **Spring Boot** back end. The application manages tasks with features like priority, due dates, and status tracking.
+  This repository hosts a simple To-Do application with a **React (TypeScript)** front end and a **Spring Boot** back end. The application manages tasks with features like priority, due dates, and status tracking.
 ---
 ## 📜 Table of Contents
 
