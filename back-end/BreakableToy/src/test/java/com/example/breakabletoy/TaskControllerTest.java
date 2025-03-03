@@ -36,9 +36,9 @@ class TaskControllerTest {
     void createTask() {
         Task task = new Task(1, "Test Task", false, LocalDateTime.now(), null, LocalDateTime.now(), "high");
         doNothing().when(taskService).addTask(task);
-        ResponseEntity<Task> response = taskController.createTask(task);
+        ResponseEntity<String> response = taskController.createTask(task);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(task, response.getBody());
+        assertEquals( task.toString(), response.getBody());
     }
 
     @Test
