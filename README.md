@@ -1,7 +1,7 @@
 
 # To-Do Application
 
-This repository hosts a simple To-Do application with a **React Native (TypeScript)** front end and a **Spring Boot** back end. The application manages tasks with features like priority, due dates, and status tracking.
+This repository hosts a simple To-Do application with a **React (TypeScript)** front end and a **Spring Boot** back end. The application manages tasks with features like priority, due dates, and status tracking.
 ---
 ## 📜 Table of Contents
 
@@ -61,41 +61,47 @@ This repository hosts a simple To-Do application with a **React Native (TypeScri
 ---
 ## 📡 API Endpoints
 
-### Task Management
-- **Create a Task:**  
-  `POST /api/tasks`  
-  **Body:** JSON with task details.  
+### Task Endpoints
 
-- **Get All Tasks:**  
-  `GET /api/tasks`  
+- **Create a new task**
+    ```
+   POST /api/tasks
+    ```
+- **Get all tasks**
+    ```
+    GET /api/tasks
+    ```
+- **Get a task by ID**
+    ```
+    PUT /api/tasks/{taskId}
+    ```
+- **Update a task by ID**
+    ```
+    DELETE /api/tasks/{taskId}
+    ```
+- **Toggle task completion status by ID**
+    ```
+    PUT /api/tasks/toggle/{taskId}
+    ```
+### Task Stats Endpoints
 
-- **Get Task by ID:**  
-  `GET /api/tasks/{taskId}`  
-
-- **Update a Task:**  
-  `PUT /api/tasks/{taskId}`  
-  **Body:** JSON with updated task details.  
-
-- **Delete a Task:**  
-  `DELETE /api/tasks/{taskId}`  
-
-- **Toggle Task Status:**  
-  `PUT /api/tasks/toggle/{taskId}`  
-
-### Filtering and Statistics
-- **Filter Tasks:**  
-  `GET /api/tasks/filter`  
-  **Query Parameters:**  
-  - `searchText` (optional): Filter by text.  
-  - `dueDate` (optional): Filter by due date.  
-  - `status` (optional): Filter by status (`completed`/`pending`).  
-  - `priority` (optional): Filter by priority (`Low`, `Medium`, `High`).  
-
-- **Get Average Time to Complete All Tasks:**  
-  `GET /api/tasks/average`  
-
-- **Get Average Time to Complete Tasks by Priority:**  
-  `GET /api/tasks/average/{priority}`  
+- **Get average time to complete tasks**
+    ```
+    GET /api/tasks/stats/average
+    ```
+- **Get average time to complete tasks by priority**
+    ```
+    GET /api/tasks/stats/average/{priority}
+    ```
+- **Get total count of tasks**
+    ```
+    GET /api/tasks/stats/count
+    ```
+- **Get count of tasks by priority**
+    ```  
+    GET /api/tasks/stats/count/priority/{priority}
+    ```
+    
 
 ---
 
@@ -113,7 +119,53 @@ Each task is represented by the following attributes:
 
 ## 🔧 Tests
 
-[WIP]
+### Front-End Tests
+
+We have implemented unit tests for various components using Jest and React Testing Library. These tests ensure that the components render correctly and handle user interactions as expected.
+
+#### Components Tested:
+- `TaskTable`
+- `TableErrorMessage`
+- `StatsTab`
+
+#### Running Front-End Tests
+
+To run the front-end tests, follow these steps:
+
+1. Navigate to the front-end project directory:
+   ```bash
+   cd ./front-end/to-do-front
+  ```
+
+2. Install the dependencies if you haven't already:
+  ```bash
+  npm install
+  ```
+
+3. Run the tests:
+  ```bash
+  npm test
+   ```
+
+This will launch the test runner in interactive watch mode, allowing you to see the test results and any errors.
+
+### Running Back-End Tests
+To run the back-end tests, follow these steps:
+
+#### Running Back-End Tests
+To run the back-end tests, follow these steps:
+
+1. Navigate to the back-end project directory:
+  ```bash
+  cd ./back-end/BreakableToy
+  ```
+
+2. Run the tests:
+  ```bash
+  mvn test
+  ```
+
+This will execute the unit tests and provide a summary of the test results.
 
 ---
 
@@ -122,14 +174,3 @@ Each task is represented by the following attributes:
 - [Tech Log](#) 
 - [Presentation](https://www.canva.com/design/DAGXztibgns/Y0GJxCTR1crYDj4Wpo08OQ/edit?utm_content=DAGXztibgns&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) 
 
----
-
-## 🩹 Features To Be Implemented
-- [ ] Front and back end tests.
-- [ ] Finalize the front-end design.
-- [ ] Fix back-end bugs.
-- [ ] Change back-end port.
-- [ ] Restructure front-end for better scalability.
-- [ ] (Optional) Add Swagger documentation.
-
----
