@@ -1,18 +1,17 @@
-// NewTodoForm.tsx
-import React, { useState } from 'react';
-import { Button, Modal, Col, Form, Row } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import { Task } from '../../interfaces/TaskInterface';
-import { createTask } from '../../store/actions';
 import { useTheme } from '../../context/ThemeContext';
+import { createTask } from '../../store/actions';
+import { AppDispatch } from '../../store/store';
 
 interface ModalProps {
     show: boolean;
     onCancel: () => void;
     setShow: (show: boolean) => void;
-    setStart: (start: boolean) => void;
-    start: boolean;
+    setStart: (start: number) => void;
+    start: number;
 }
 
 export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalProps) {
@@ -23,6 +22,19 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
     const [date, setDate] = useState(new Date().toISOString());
     const [dueDated, setDueDated] = useState(false);
     const { theme } = useTheme();
+    const tasks = useSelector((state: any) => state.tasks); // Adjust the selector based on your state structure
+
+    useEffect(() => {
+        if (start !== -1 && tasks[start]) {
+            const task = tasks[start];
+            setText(task.description);
+            setPriority(task.priority);
+            setDate(task.dueDate ? new Date(task.dueDate).toISOString() : new Date().toISOString());
+            setDueDated(!!task.dueDate);
+        } else {
+            resetForm();
+        }
+    }, [start, tasks]);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -30,15 +42,20 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
         if (event.currentTarget.checkValidity()) {
             const newTask: Task = { description: text, priority: priority };
             if (dueDated) newTask.dueDate = new Date(date);
-            dispatch(createTask(newTask))
+            if (start === -1) {
+                dispatch(createTask(newTask))
                 .then(() => {
                     alert('Task added successfully!');
                     resetForm();
                 })
-                .catch((error) => {
+                .catch((error: any) => {
                     console.error('Error adding task:', error);
                     alert('Failed to add the task.');
                 });
+            } else {
+                console.log('Update task:', newTask);
+                // Dispatch update task action here
+            }
         }
     };
 
@@ -47,7 +64,7 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
         setDate(new Date().toISOString());
         setPriority('Low');
         setShow(false);
-        setStart(!start);
+        setStart(-1);
     };
 
     const handleClose = () => setShow(false);

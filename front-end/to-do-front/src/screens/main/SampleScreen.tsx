@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '../../store/store';
 import { useTheme } from '../../context/ThemeContext';
 
 
-export default function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: boolean }) {
+export default function ScreenComponent(props: { setShow: (arg0: boolean) => void; start: number }) {
   const [nameFilter, setNameFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [stateFilter, setStateFilter] = useState(false);
