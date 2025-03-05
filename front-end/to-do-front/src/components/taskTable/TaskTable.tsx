@@ -12,9 +12,11 @@ interface TableProps {
     filteredTasks: Task[];
     setShow: (arg0: boolean) => void;
     setStart: (arg0: number) => void;
+    showToast: (arg0: boolean) => void;
+    setToast: (arg0: string) => void;
 }
 
-export default function TaskTable({ filteredTasks, setShow, setStart } : TableProps) {
+export default function TaskTable({ filteredTasks, setShow, setStart, showToast, setToast } : TableProps) {
   const dispatch = useDispatch<AppDispatch>();
   const {theme} = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,19 +41,28 @@ export default function TaskTable({ filteredTasks, setShow, setStart } : TablePr
     dispatch(toggleTaskStatus(taskId))
       .then(() => {
         console.log('Task status toggled successfully');
+        setToast(completed ? '✅ Task completed!' : '✅ Task changed to pending!');
+        showToast(true);
       })
       .catch((error: any) => {
         console.error('Error toggling task status:', error);
+        setToast('🚫 Failed to toggle the task. Check logs.');
+        showToast(true);
       });
   };
 
   const handleDelete = (taskId: number) => {
     dispatch(deleteTask(taskId))
       .then(() => {
+
         console.log('Task deleted successfully');
+        setToast('✅ Task deleted successfully!');
+        showToast(true);
       })
       .catch((error: any) => {
         console.error('Error deleting task:', error);
+        setToast('🚫 Failed to delete the task. Check logs.');
+        showToast(true);
       });
   };
 

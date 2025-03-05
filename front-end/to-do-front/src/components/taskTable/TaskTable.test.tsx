@@ -33,7 +33,7 @@ describe('TaskTable', () => {
     render(
       <Provider store={store}>
         <ThemeProvider>
-            <TaskTable filteredTasks={initialState.tasks.tasks} setShow={jest.fn()} setStart={jest.fn()} />
+            <TaskTable filteredTasks={initialState.tasks.tasks} setShow={jest.fn()} setStart={jest.fn()} showToast={jest.fn()} setToast={jest.fn()}/>
         </ThemeProvider>
       </Provider>
     );

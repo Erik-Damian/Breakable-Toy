@@ -3,7 +3,7 @@ import { Button, Col, Form, Modal, Row, Toast, ToastContainer } from 'react-boot
 import { useDispatch, useSelector } from 'react-redux';
 import { Task } from '../../interfaces/TaskInterface';
 import { useTheme } from '../../context/ThemeContext';
-import { createTask, updateTask } from '../../store/TaskSlice';
+import { createTask, updateTask, fetchTasks } from '../../store/TaskSlice';
 import { AppDispatch } from '../../store/store';
 
 interface ModalProps {
@@ -60,12 +60,15 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
                     });
             } else {
                 const taskId = tasks.tasks[start].id;
+                newTask.completed = tasks.tasks[start].completed;
+                if(newTask.completed) newTask.finishedDate = tasks.tasks[start].finishedDate;
                 dispatch(updateTask({ id: taskId, task: newTask }))
                     .then(() => {
                         setToastMessage('✅ Task updated successfully!');
                         setShowToast(true);
                         resetForm();
                         setShow(false);
+                        dispatch(fetchTasks());
                     })
                     .catch((error: any) => {
                         console.error('Error updating task:', error);
@@ -80,6 +83,7 @@ export function NewTodoForm({ show, onCancel, setShow, setStart, start }: ModalP
         setText('');
         setDate(new Date().toISOString());
         setPriority('Low');
+        setDueDated(false);
     };
 
     const handleClose = () => setShow(false);

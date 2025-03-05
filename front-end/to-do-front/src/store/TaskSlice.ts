@@ -52,11 +52,15 @@ const handleAsyncTaskActions = (builder: any, thunk: any, key: keyof TaskListInt
       if (isArray) {
         (state[key] as unknown as Task[]) = action.payload;
       } else {
-        const index = state.tasks.findIndex((task: Task) => task.id === action.payload.id);
-        if (index !== -1) {
-          state.tasks[index] = action.payload;
+        if (thunk === deleteTask) {
+          state.tasks = state.tasks.filter((task: Task) => task.id !== action.payload);
         } else {
-          state.tasks.push(action.payload);
+          const index = state.tasks.findIndex((task: Task) => task.id === action.payload.id);
+          if (index !== -1) {
+            state.tasks[index] = action.payload;
+          } else {
+            state.tasks.push(action.payload);
+          }
         }
       }
     })
