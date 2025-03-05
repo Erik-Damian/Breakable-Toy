@@ -69,7 +69,7 @@ class TaskServiceTest {
         Task task = new Task(1, "Test Task", false, LocalDateTime.now(), null, LocalDateTime.now(), "high");
         tasks.add(task);
         Task updatedTask = new Task(1, "Updated Task", true, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), "low");
-        taskService.updateTask(updatedTask);
+        taskService.updateTask(updatedTask, 1);
         assertEquals("Updated Task", task.getDescription());
         assertTrue(task.getCompleted());
         assertEquals("low", task.getPriority());

@@ -22,7 +22,7 @@ public class TaskController {
 
     // Create a new task
     @PostMapping
-    public ResponseEntity<String> createTask(@RequestBody Task task) {
+    public ResponseEntity<Object> createTask(@RequestBody Task task) {
         String priority = task.getPriority();
         if (priority == null || priority.isEmpty()) {
             task.setPriority("Low");
@@ -41,7 +41,7 @@ public class TaskController {
         }
         taskService.addTask(task);
         logger.info("Task created: " + task);
-        return new ResponseEntity<>(task.toString(), HttpStatus.CREATED);
+        return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
     // Get all tasks
@@ -70,7 +70,7 @@ public class TaskController {
     public ResponseEntity<Task> updateTask(@PathVariable int taskId, @RequestBody Task updatedTask) {
         Optional<Task> existingTask = taskService.getTask(taskId);
         if (existingTask.isPresent()) {
-            taskService.updateTask(updatedTask);
+            taskService.updateTask(updatedTask, taskId);
             logger.info("Task updated with ID: " + taskId);
             return new ResponseEntity<>(updatedTask, HttpStatus.OK);
         } else {

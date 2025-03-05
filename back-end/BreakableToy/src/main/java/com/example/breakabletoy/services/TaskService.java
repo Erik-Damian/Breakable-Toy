@@ -51,13 +51,12 @@ public class TaskService {
     }
 
     // Update an existing task
-    public void updateTask(Task updatedTask) {
-        getTask(updatedTask.getId()).ifPresent(existingTask -> {
+    public void updateTask(Task updatedTask, int taskId) {
+        getTask(taskId).ifPresent(existingTask -> {
             existingTask.setDescription(updatedTask.getDescription());
             existingTask.setCompleted(updatedTask.getCompleted());
             existingTask.setDueDate(updatedTask.getDueDate());
             existingTask.setFinishDate(updatedTask.getFinishDate());
-            existingTask.setCreatedDate(updatedTask.getCreatedDate());
             existingTask.setPriority(updatedTask.getPriority());
             logger.info("Task updated: " + updatedTask);
         });
